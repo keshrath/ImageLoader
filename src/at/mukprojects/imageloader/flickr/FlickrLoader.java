@@ -60,6 +60,35 @@ public class FlickrLoader extends ImageLoader {
 
     @Override
     public ImageList start(String searchParam, ImageList imageList) {
+	if (thread != null) {
+	    logger.info("Loader is already started.");
+	    logger.info("The restart method will be used instead.");
+
+	    return restart(searchParam, imageList);
+	} else {
+	    runnable = new FlickrTask(applet, searchParam, imageList, flickr);
+	    thread = new Thread(runnable, "FlickrTask");
+
+	    logger.info("Starting Thread: " + thread + "...");
+	    thread.start();
+	    logger.debug(thread + " successfully started.");
+
+	    return imageList;
+	}
+    }
+
+    @Override
+    public ImageList restart(String searchParam) {
+	return restart(searchParam, new ImageList());
+
+    }
+
+    @Override
+    public ImageList restart(String searchParam, ImageList imageList) {
+	logger.info("Stopping the current thread: " + thread + "...");
+	runnable.stop();
+	logger.debug(thread + " successfully stopped.");
+
 	runnable = new FlickrTask(applet, searchParam, imageList, flickr);
 	thread = new Thread(runnable, "FlickrTask");
 
@@ -68,6 +97,17 @@ public class FlickrLoader extends ImageLoader {
 	logger.debug(thread + " successfully started.");
 
 	return imageList;
+    }
+
+    @Override
+    public void stop() {
+	logger.info("Stopping the current thread: " + thread + "...");
+	
+	runnable.stop();
+	thread = null;
+	runnable = null;
+	
+	logger.debug(thread + " successfully stopped.");
     }
 
 }

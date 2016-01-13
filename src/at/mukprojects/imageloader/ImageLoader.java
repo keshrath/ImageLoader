@@ -61,4 +61,29 @@ public abstract class ImageLoader {
      * @return The used ImageList.
      */
     public abstract ImageList start(String searchParam, ImageList imageList);
+
+    /**
+     * Restarts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
+     * @return The used ImageList.
+     */
+    public abstract ImageList restart(String searchParam);
+
+    /**
+     * Restarts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
+     * @param imageList
+     *            The ImageList, which should be used.
+     * @return The used ImageList.
+     */
+    public abstract ImageList restart(String searchParam, ImageList imageList);
+
+    /**
+     * Stops the loader.
+     */
+    public abstract void stop();
 }
