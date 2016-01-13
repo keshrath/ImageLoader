@@ -1,5 +1,5 @@
 /**
- * This code is copyright (c) Mathias Markl 2015
+ * This code is copyright (c) Mathias Markl 2016
  *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -17,12 +17,11 @@
 
 package at.mukprojects.imageloader;
 
+import at.mukprojects.imageloader.image.ImageList;
 import processing.core.PApplet;
 
 /**
- * TODO
- *
- * @example
+ * Base class for any ImageLoader.
  *
  * @author Mathias Markl
  */
@@ -33,7 +32,33 @@ public abstract class ImageLoader {
      */
     protected PApplet applet;
 
+    /**
+     * Constructs a new ImageLoader.
+     * 
+     * @param applet
+     *            The Processing PApplet.
+     */
     public ImageLoader(PApplet applet) {
 	this.applet = applet;
     }
+
+    /**
+     * Starts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
+     * @return The used ImageList.
+     */
+    public abstract ImageList start(String searchParam);
+
+    /**
+     * Starts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
+     * @param imageList
+     *            The ImageList, which should be used.
+     * @return The used ImageList.
+     */
+    public abstract ImageList start(String searchParam, ImageList imageList);
 }
