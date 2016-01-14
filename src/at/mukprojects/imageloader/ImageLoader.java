@@ -17,6 +17,11 @@
 
 package at.mukprojects.imageloader;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 import at.mukprojects.imageloader.image.ImageList;
 import processing.core.PApplet;
 
@@ -26,6 +31,12 @@ import processing.core.PApplet;
  * @author Mathias Markl
  */
 public abstract class ImageLoader {
+
+    /**
+     * Logger Settings
+     */
+    private static final String PATTERN = "%5p (%C{1}) - %m%n";
+    private static final String DEFAULT_APPENDER = "DefaultConsoleAppender";
 
     /**
      * The Processing PApplet.
@@ -40,6 +51,17 @@ public abstract class ImageLoader {
      */
     public ImageLoader(PApplet applet) {
 	this.applet = applet;
+
+	/*
+	 * Logger configuration
+	 */
+	if (!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
+	    Logger.getRootLogger().setLevel(Level.DEBUG);
+
+	    ConsoleAppender appender = new ConsoleAppender(new PatternLayout(PATTERN));
+	    appender.setName(DEFAULT_APPENDER);
+	    Logger.getRootLogger().addAppender(appender);
+	}
     }
 
     /**

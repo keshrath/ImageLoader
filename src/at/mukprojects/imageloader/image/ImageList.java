@@ -95,7 +95,11 @@ public class ImageList {
      * @return A random image.
      */
     public Image getRandom() {
-	return getImage(random.nextInt(images.size()));
+	if (images.isEmpty()) {
+	    return null;
+	} else {
+	    return getImage(random.nextInt(images.size()));
+	}
     }
 
     /**

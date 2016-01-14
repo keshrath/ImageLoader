@@ -25,6 +25,7 @@ import com.flickr4java.flickr.REST;
 
 import at.mukprojects.imageloader.ImageLoader;
 import at.mukprojects.imageloader.image.ImageList;
+
 import processing.core.PApplet;
 
 /**
@@ -51,6 +52,14 @@ public class FlickrLoader extends ImageLoader {
 	this.apiSecret = apiSecret;
 
 	this.flickr = new Flickr(apiKey, apiSecret, new REST());
+    }
+
+    public String getApiKey() {
+	return apiKey;
+    }
+
+    public String getApiSecret() {
+	return apiSecret;
     }
 
     @Override
@@ -102,12 +111,11 @@ public class FlickrLoader extends ImageLoader {
     @Override
     public void stop() {
 	logger.info("Stopping the current thread: " + thread + "...");
-	
+
 	runnable.stop();
 	thread = null;
 	runnable = null;
-	
+
 	logger.debug(thread + " successfully stopped.");
     }
-
 }
