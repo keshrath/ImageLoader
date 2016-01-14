@@ -56,7 +56,7 @@ public abstract class ImageLoader {
 	 * Logger configuration
 	 */
 	if (!Logger.getRootLogger().getAllAppenders().hasMoreElements()) {
-	    Logger.getRootLogger().setLevel(Level.DEBUG);
+	    Logger.getRootLogger().setLevel(Level.INFO);
 
 	    ConsoleAppender appender = new ConsoleAppender(new PatternLayout(PATTERN));
 	    appender.setName(DEFAULT_APPENDER);

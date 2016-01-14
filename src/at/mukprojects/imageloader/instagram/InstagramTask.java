@@ -15,19 +15,17 @@
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package at.mukprojects.imageloader.flickr;
+package at.mukprojects.imageloader.instagram;
 
 import java.util.Date;
+import java.util.List;
 
+import org.jinstagram.Instagram;
+import org.jinstagram.entity.tags.TagMediaFeed;
+import org.jinstagram.entity.users.feed.MediaFeedData;
+import org.jinstagram.exceptions.InstagramException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.flickr4java.flickr.Flickr;
-import com.flickr4java.flickr.FlickrException;
-import com.flickr4java.flickr.photos.Photo;
-import com.flickr4java.flickr.photos.PhotoList;
-import com.flickr4java.flickr.photos.PhotosInterface;
-import com.flickr4java.flickr.photos.SearchParameters;
 
 import at.mukprojects.imageloader.image.Image;
 import at.mukprojects.imageloader.image.ImageList;
@@ -39,16 +37,16 @@ import processing.core.PImage;
  * 
  * @author Mathias Markl
  */
-public class FlickrTask implements Runnable {
+public class InstagramTask implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(FlickrTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(InstagramTask.class);
 
     private static final long delay = 1000 * 60;
 
     private PApplet applet;
     private String serachParam;
     private ImageList imageList;
-    private Flickr flickr;
+    private Instagram instagram;
 
     private volatile boolean running;
 
@@ -61,14 +59,14 @@ public class FlickrTask implements Runnable {
      *            The search parameter.
      * @param imageList
      *            The ImageList object.
-     * @param flickr
-     *            The Flickr object.
+     * @param instagram
+     *            The Instagram object.
      */
-    public FlickrTask(PApplet applet, String searchParam, ImageList imageList, Flickr flickr) {
+    public InstagramTask(PApplet applet, String searchParam, ImageList imageList, Instagram instagram) {
 	this.applet = applet;
 	this.serachParam = searchParam;
 	this.imageList = imageList;
-	this.flickr = flickr;
+	this.instagram = instagram;
 
 	running = true;
     }
@@ -84,31 +82,25 @@ public class FlickrTask implements Runnable {
     public void run() {
 	logger.info("Task is running...");
 
-	PhotosInterface photoInterface = flickr.getPhotosInterface();
-	SearchParameters searchParameters = new SearchParameters();
-	searchParameters.setAccuracy(1);
-	searchParameters.setTags(PApplet.split(serachParam, " "));
-
-	for (int i = 0; running; i++) {
+	while (running) {
 	    try {
 		logger.debug("Task loads data.");
 
-		PhotoList<Photo> photoList = photoInterface.search(searchParameters, 50, i);
+		TagMediaFeed mediaFeed = instagram.getRecentMediaTags(serachParam, 30);
+		List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
-		for (Photo p : photoList) {
-		    Photo photo = photoInterface.getInfo(p.getId(), null);
-
-		    String id = "Flickr#" + photo.getId();
+		for (MediaFeedData data : mediaFeeds) {
+		    String id = "Instagram#" + data.getId();
 
 		    String imgInfo = "";
-		    imgInfo += "Title: " + photo.getTitle() + "\n";
+		    imgInfo += "User: " + data.getUser().getFullName() + "\n";
 		    imgInfo += "Description:\n";
-		    imgInfo += photo.getDescription() + "\n";
-		    imgInfo += "License:\n";
-		    imgInfo += FlickrLicenses.fromId(photo.getLicense()).getText();
+		    imgInfo += data.getCaption().getText() + "\n";
+		    imgInfo += "Filter:\n";
+		    imgInfo += data.getImageFilter();
 
 		    long timestamp = new Date().getTime();
-		    String imgUrl = photo.getLargeUrl();
+		    String imgUrl = data.getImages().getStandardResolution().getImageUrl();
 
 		    PImage img = applet.loadImage(imgUrl);
 
@@ -117,7 +109,7 @@ public class FlickrTask implements Runnable {
 
 		logger.debug("Task is delayed...");
 		Thread.sleep(delay);
-	    } catch (InterruptedException | FlickrException e) {
+	    } catch (InterruptedException | InstagramException e) {
 		logger.error("An error occured. The task will be stopped.", e);
 		running = false;
 	    }
