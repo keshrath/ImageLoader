@@ -45,6 +45,16 @@ public class FlickrLoader extends ImageLoader {
     private Thread thread = null;
     private FlickrTask runnable = null;
 
+    /**
+     * Constructs a new ImageLoader.
+     * 
+     * @param applet
+     *            The Processing PApplet.
+     * @param apiKey
+     *            The API key.
+     * @param apiSecret
+     *            The API secret.
+     */
     public FlickrLoader(PApplet applet, String apiKey, String apiSecret) {
 	super(applet);
 
@@ -63,19 +73,14 @@ public class FlickrLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList start(String searchParam) {
-	return start(searchParam, new ImageList());
-    }
-
-    @Override
-    public ImageList start(String searchParam, ImageList imageList) {
+    public ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay) {
 	if (thread != null) {
 	    logger.info("Loader is already started.");
 	    logger.info("The restart method will be used instead.");
 
-	    return restart(searchParam, imageList);
+	    return restart(searchParam, imageList, runOnce, delay);
 	} else {
-	    runnable = new FlickrTask(applet, searchParam, imageList, flickr);
+	    runnable = new FlickrTask(applet, searchParam, imageList, flickr, runOnce, delay);
 	    thread = new Thread(runnable, "FlickrTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
@@ -87,18 +92,12 @@ public class FlickrLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList restart(String searchParam) {
-	return restart(searchParam, new ImageList());
-
-    }
-
-    @Override
-    public ImageList restart(String searchParam, ImageList imageList) {
+    public ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay) {
 	logger.info("Stopping the current thread: " + thread + "...");
 	runnable.stop();
 	logger.debug(thread + " successfully stopped.");
 
-	runnable = new FlickrTask(applet, searchParam, imageList, flickr);
+	runnable = new FlickrTask(applet, searchParam, imageList, flickr, runOnce, delay);
 	thread = new Thread(runnable, "FlickrTask");
 
 	logger.info("Starting Thread: " + thread + "...");

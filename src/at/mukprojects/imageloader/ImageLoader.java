@@ -69,9 +69,15 @@ public abstract class ImageLoader {
      * 
      * @param searchParam
      *            The search parameter.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
      * @return The used ImageList.
      */
-    public abstract ImageList start(String searchParam);
+    public ImageList start(String searchParam, boolean runOnce, long delay) {
+	return start(searchParam, new ImageList(), runOnce, delay);
+    }
 
     /**
      * Starts the loader.
@@ -80,18 +86,28 @@ public abstract class ImageLoader {
      *            The search parameter.
      * @param imageList
      *            The ImageList, which should be used.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
      * @return The used ImageList.
      */
-    public abstract ImageList start(String searchParam, ImageList imageList);
+    public abstract ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay);
 
     /**
      * Restarts the loader.
      * 
      * @param searchParam
      *            The search parameter.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
      * @return The used ImageList.
      */
-    public abstract ImageList restart(String searchParam);
+    public ImageList restart(String searchParam, boolean runOnce, long delay) {
+	return restart(searchParam, new ImageList(), runOnce, delay);
+    }
 
     /**
      * Restarts the loader.
@@ -100,9 +116,13 @@ public abstract class ImageLoader {
      *            The search parameter.
      * @param imageList
      *            The ImageList, which should be used.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
      * @return The used ImageList.
      */
-    public abstract ImageList restart(String searchParam, ImageList imageList);
+    public abstract ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay);
 
     /**
      * Stops the loader.

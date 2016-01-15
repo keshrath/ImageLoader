@@ -38,7 +38,7 @@ void setup() {
   // API with client ID
   // loader = new InstagramLoader(this, clientId);
   
-  list = loader.start("vienna");
+  list = loader.start("vienna", false, 60 * 1000);
 }
 
 void draw() {

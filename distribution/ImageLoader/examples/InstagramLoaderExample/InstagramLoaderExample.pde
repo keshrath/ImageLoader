@@ -19,7 +19,11 @@ import at.mukprojects.imageloader.*;
 import at.mukprojects.imageloader.instagram.*;
 import at.mukprojects.imageloader.image.*;
 
-String accessToken = "1722917717.cbb3637.c9d399ea75b24dad9afe5f8b52e186db";
+// API with access token
+String accessToken = "yourAccessToken";
+
+// API with client ID
+String clientId = "yourClientID";
 
 ImageLoader loader;
 ImageList list;
@@ -28,8 +32,13 @@ Image img;
 void setup() {
   size(800, 450);
 
+  // API with access token
   loader = new InstagramLoader(this, accessToken, "");
-  list = loader.start("vienna");
+  
+  // API with client ID
+  // loader = new InstagramLoader(this, clientId);
+  
+  list = loader.start("vienna", false, 60 * 1000);
 }
 
 void draw() {

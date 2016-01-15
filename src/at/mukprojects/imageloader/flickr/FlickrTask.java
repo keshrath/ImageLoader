@@ -43,12 +43,13 @@ public class FlickrTask implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(FlickrTask.class);
 
-    private static final long delay = 1000 * 60;
-
     private PApplet applet;
     private String serachParam;
     private ImageList imageList;
     private Flickr flickr;
+
+    private boolean runOnce;
+    private long delay;
 
     private volatile boolean running;
 
@@ -63,12 +64,20 @@ public class FlickrTask implements Runnable {
      *            The ImageList object.
      * @param flickr
      *            The Flickr object.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
      */
-    public FlickrTask(PApplet applet, String searchParam, ImageList imageList, Flickr flickr) {
+    public FlickrTask(PApplet applet, String searchParam, ImageList imageList, Flickr flickr, boolean runOnce,
+	    long delay) {
 	this.applet = applet;
 	this.serachParam = searchParam;
 	this.imageList = imageList;
 	this.flickr = flickr;
+
+	this.runOnce = runOnce;
+	this.delay = delay;
 
 	running = true;
     }
@@ -115,8 +124,13 @@ public class FlickrTask implements Runnable {
 		    imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
 		}
 
-		logger.debug("Task is delayed...");
-		Thread.sleep(delay);
+		if (runOnce) {
+		    logger.debug("Task is finished.");
+		    running = false;
+		} else {
+		    logger.debug("Task is delayed...");
+		    Thread.sleep(delay);
+		}
 	    } catch (InterruptedException | FlickrException e) {
 		logger.error("An error occured. The task will be stopped.", e);
 		running = false;

@@ -30,7 +30,7 @@ void setup() {
   size(800, 450);
 
   loader = new FlickrLoader(this, apiKey, apiSecret);
-  list = loader.start("sunset beach");
+  list = loader.start("sunset beach", false, 60 * 1000);
 }
 
 void draw() {

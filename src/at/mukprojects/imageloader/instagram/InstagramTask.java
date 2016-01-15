@@ -33,7 +33,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 /**
- * This class represents the FlickrLoader task.
+ * This class represents the InstagramLoader task.
  * 
  * @author Mathias Markl
  */
