@@ -48,7 +48,7 @@ public class GoogleTask implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(GoogleTask.class);
 
     private PApplet applet;
-    private String serachParam;
+    private String searchParam;
     private ImageList imageList;
 
     private String apiKey;
@@ -60,7 +60,7 @@ public class GoogleTask implements Runnable {
     private volatile boolean running;
 
     /**
-     * Constructs a new FlickrTask.
+     * Constructs a new GoogleTask.
      * 
      * @param applet
      *            The Processing PApplet.
@@ -80,7 +80,7 @@ public class GoogleTask implements Runnable {
     public GoogleTask(PApplet applet, String searchParam, ImageList imageList, String apiKey, String searchEngineId,
 	    boolean runOnce, long delay) {
 	this.applet = applet;
-	this.serachParam = searchParam;
+	this.searchParam = searchParam;
 	this.imageList = imageList;
 
 	this.apiKey = apiKey;
@@ -115,7 +115,7 @@ public class GoogleTask implements Runnable {
 
 		List<Result> resultList = null;
 
-		Customsearch.Cse.List list = customsearch.cse().list(serachParam);
+		Customsearch.Cse.List list = customsearch.cse().list(searchParam);
 
 		list.setKey(apiKey);
 		list.setCx(searchEngineId);

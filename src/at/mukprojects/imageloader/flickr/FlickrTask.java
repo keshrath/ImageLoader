@@ -44,7 +44,7 @@ public class FlickrTask implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(FlickrTask.class);
 
     private PApplet applet;
-    private String serachParam;
+    private String searchParam;
     private ImageList imageList;
     private Flickr flickr;
 
@@ -72,7 +72,7 @@ public class FlickrTask implements Runnable {
     public FlickrTask(PApplet applet, String searchParam, ImageList imageList, Flickr flickr, boolean runOnce,
 	    long delay) {
 	this.applet = applet;
-	this.serachParam = searchParam;
+	this.searchParam = searchParam;
 	this.imageList = imageList;
 	this.flickr = flickr;
 
@@ -96,7 +96,7 @@ public class FlickrTask implements Runnable {
 	PhotosInterface photoInterface = flickr.getPhotosInterface();
 	SearchParameters searchParameters = new SearchParameters();
 	searchParameters.setAccuracy(1);
-	searchParameters.setTags(PApplet.split(serachParam, " "));
+	searchParameters.setTags(PApplet.split(searchParam, " "));
 
 	for (int i = 0; running; i++) {
 	    try {

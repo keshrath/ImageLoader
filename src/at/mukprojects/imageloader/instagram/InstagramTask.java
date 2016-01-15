@@ -44,14 +44,14 @@ public class InstagramTask implements Runnable {
     private static final long delay = 1000 * 60;
 
     private PApplet applet;
-    private String serachParam;
+    private String searchParam;
     private ImageList imageList;
     private Instagram instagram;
 
     private volatile boolean running;
 
     /**
-     * Constructs a new FlickrTask.
+     * Constructs a new InstagramTask.
      * 
      * @param applet
      *            The Processing PApplet.
@@ -64,7 +64,7 @@ public class InstagramTask implements Runnable {
      */
     public InstagramTask(PApplet applet, String searchParam, ImageList imageList, Instagram instagram) {
 	this.applet = applet;
-	this.serachParam = searchParam;
+	this.searchParam = searchParam;
 	this.imageList = imageList;
 	this.instagram = instagram;
 
@@ -86,7 +86,7 @@ public class InstagramTask implements Runnable {
 	    try {
 		logger.debug("Task loads data.");
 
-		TagMediaFeed mediaFeed = instagram.getRecentMediaTags(serachParam, 30);
+		TagMediaFeed mediaFeed = instagram.getRecentMediaTags(searchParam, 30);
 		List<MediaFeedData> mediaFeeds = mediaFeed.getData();
 
 		for (MediaFeedData data : mediaFeeds) {

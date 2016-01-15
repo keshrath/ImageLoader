@@ -61,6 +61,15 @@ public class ImageList {
     }
 
     /**
+     * Returns the number of key-value mappings in this list.
+     * 
+     * @return The size of the list.
+     */
+    public int size() {
+	return images.size();
+    }
+
+    /**
      * Returns a list of all available image identifiers.
      * 
      * @return A list of all image identifiers.
