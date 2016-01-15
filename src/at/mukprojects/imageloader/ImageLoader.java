@@ -69,6 +69,17 @@ public abstract class ImageLoader {
      * 
      * @param searchParam
      *            The search parameter.
+     * @return The used ImageList.
+     */
+    public ImageList start(String searchParam) {
+	return start(searchParam, new ImageList(), false, 60 * 1000);
+    }
+    
+    /**
+     * Starts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
      * @param runOnce
      *            If the value is set to true, the loader will only run once.
      * @param delay
@@ -94,6 +105,17 @@ public abstract class ImageLoader {
      */
     public abstract ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay);
 
+    /**
+     * Restarts the loader.
+     * 
+     * @param searchParam
+     *            The search parameter.
+     * @return The used ImageList.
+     */
+    public ImageList restart(String searchParam) {
+	return restart(searchParam, new ImageList(), false, 60 * 1000);
+    }
+    
     /**
      * Restarts the loader.
      * 

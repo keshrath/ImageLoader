@@ -16,11 +16,10 @@
  */
 
 import at.mukprojects.imageloader.*;
-import at.mukprojects.imageloader.flickr.*;
+import at.mukprojects.imageloader.google.*;
 import at.mukprojects.imageloader.image.*;
 
 String apiKey = "yourApiKey";
-String apiSecret = "yourApiSecret";
 
 ImageLoader loader;
 ImageList list;
@@ -29,8 +28,8 @@ Image img;
 void setup() {
   size(800, 450);
 
-  loader = new FlickrLoader(this, apiKey, apiSecret);
-  list = loader.start("sunset beach", false, 60 * 1000);
+  loader = new GoogleLoader(this, apiKey);
+  list = loader.start("sunset beach", true, 60 * 1000);
 }
 
 void draw() {

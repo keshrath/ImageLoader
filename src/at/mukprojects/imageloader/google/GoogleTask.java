@@ -110,7 +110,8 @@ public class GoogleTask implements Runnable {
 		HttpTransport httpTransport = new NetHttpTransport();
 		JsonFactory jsonFactory = new JacksonFactory();
 
-		Customsearch customsearch = new Customsearch(httpTransport, jsonFactory, null);
+		Customsearch customsearch = new Customsearch.Builder(httpTransport, jsonFactory, null)
+			.setApplicationName("ImageLoader").build();
 
 		List<Result> resultList = null;
 
