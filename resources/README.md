@@ -103,7 +103,7 @@ The folder structure for library Console should be as follows:
 ```
 Processing
   libraries
-    Console
+    ImageLoader
       examples
       library
       reference
