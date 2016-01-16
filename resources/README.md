@@ -38,7 +38,7 @@ void mousePressed() {
 To connect to the APIs from Flickr, Instagram and Google the ImageLoader uses other libraries.
 
 * Instagram ([jInstagram] (https://github.com/sachin-handiekar/jInstagram))
-* Google ([API Client Library for Java] (https://developers.google.com/api-client-library/java/)
+* Google ([API Client Library for Java] (https://developers.google.com/api-client-library/java/))
 * Flickr ([Flickr4Java] (https://github.com/callmeal/Flickr4Java))
 
 ### Instagram
