@@ -17,6 +17,8 @@
 
 package at.mukprojects.imageloader.image;
 
+import java.util.Date;
+
 import processing.core.PImage;
 
 /**
@@ -99,5 +101,17 @@ public class Image {
      */
     public PImage getImg() {
 	return img;
+    }
+
+    @Override
+    public String toString() {
+	String s = "";
+	
+	s += "ID: " + id + "\n";
+	s += "Info:\n" + imgInfo + "\n";
+	s += "imgUrl:\n" + imgInfo + "\n";
+	s += "Timestamp: " + new Date(timestamp);
+	
+	return s;
     }
 }
