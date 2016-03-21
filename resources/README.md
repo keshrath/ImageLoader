@@ -2,7 +2,7 @@
 
 ImageLoader is an library for the [Processing](http://processing.org/) Development Environment (PDE).
 
-ImageLoader is an simple to use API to load images from either Instagram, Flickr, Google or your file system.
+ImageLoader is an simple to use API to load images from either Instagram, Flickr, Google, Giphy or your file system.
 
 The API uses thread based loader task to fetch the images. It's possible to set an delay so that the task will run several times in the background and checks for new images. All images are stored in a list and can be accessed by several methods.
 
