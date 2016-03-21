@@ -124,7 +124,7 @@ Get your Google API key by following the steps on the [Google developers page] (
 ImageLoader loader = new GoogleLoader(this, apiKey);
 ```
 
-### Google
+### Giphy
 
 Get your Giphy API key from the [Giphy Homepage] (https://api.giphy.com/).
 
