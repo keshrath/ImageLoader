@@ -17,9 +17,14 @@
 
 package at.mukprojects.imageloader.gif;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 
-import gifAnimation.Gif;
+import gifAnimation.GifDecoder;
 import processing.core.PImage;
 
 /**
@@ -47,9 +52,28 @@ public class GifData {
      * @param timestamp
      *            The image timestamp.
      * @param gifUrl
-     *            The gif url.
+     *            The GIF URL.
+     */
+    public GifData(String id, String imgInfo, long timestamp, String imgUrl) {
+	this.id = id;
+	this.imgInfo = imgInfo;
+	this.timestamp = timestamp;
+	this.gifUrl = imgUrl;
+    }
+
+    /**
+     * Constructs a new image.
+     * 
+     * @param id
+     *            The image id. The id must be unique.
+     * @param imgInfo
+     *            The image info.
+     * @param timestamp
+     *            The image timestamp.
+     * @param gifUrl
+     *            The GIF URL.
      * @param frames
-     *            The gifs.
+     *            The GIFs.
      */
     public GifData(String id, String imgInfo, long timestamp, String imgUrl, PImage[] frames) {
 	this.id = id;
@@ -87,32 +111,58 @@ public class GifData {
     }
 
     /**
-     * Gets the gif url.
+     * Gets the GIF URL.
      * 
-     * @return The gif url.
+     * @return The GIF URL.
      */
     public String getGifUrl() {
 	return gifUrl;
     }
 
     /**
-     * Gets the gif.
+     * Gets the GIF. If the GIF is in lazy load mode and an error occurs during
+     * the loading process the method will return null.
      * 
-     * @return The gif.
+     * @return The GIF.
      */
     public PImage[] getGifFrames() {
+	if (frames == null) {
+	    try {
+		URL u = new URL(gifUrl);
+		HttpURLConnection uc = (HttpURLConnection) u.openConnection();
+
+		GifDecoder decoder = new GifDecoder();
+		decoder.read(new BufferedInputStream(uc.getInputStream()));
+
+		int n = decoder.getFrameCount();
+
+		frames = new PImage[n];
+
+		for (int j = 0; j < n; j++) {
+		    BufferedImage frame = decoder.getFrame(j);
+		    frames[j] = new PImage(frame.getWidth(), frame.getHeight(), PImage.ARGB);
+		    System.arraycopy(frame.getRGB(0, 0, frame.getWidth(), frame.getHeight(), null, 0, frame.getWidth()),
+			    0, frames[j].pixels, 0, frame.getWidth() * frame.getHeight());
+		}
+	    } catch (IOException e) {
+	    }
+	}
 	return frames;
+    }
+    
+    public void clearMemSpace() {
+	frames = null;
     }
 
     @Override
     public String toString() {
 	String s = "";
-	
+
 	s += "ID: " + id + "\n";
 	s += "Info:\n" + imgInfo + "\n";
 	s += "gifUrl:\n" + imgInfo + "\n";
 	s += "Timestamp: " + new Date(timestamp);
-	
+
 	return s;
     }
 }

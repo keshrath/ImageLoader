@@ -56,14 +56,14 @@ public class GiphyLoader extends GifLoader {
     }
 
     @Override
-    public GifList start(String searchParam, GifList gifList, boolean runOnce, long delay) {
+    public GifList start(String searchParam, GifList gifList, boolean runOnce, long delay, boolean lazyLoad) {
 	if (thread != null) {
 	    logger.info("Loader is already started.");
 	    logger.info("The restart method will be used instead.");
 
-	    return restart(searchParam, gifList, runOnce, delay);
+	    return restart(searchParam, gifList, runOnce, delay, lazyLoad);
 	} else {
-	    runnable = new GiphyTask(applet, searchParam, gifList, apiKey, giphy4j, runOnce, delay);
+	    runnable = new GiphyTask(applet, searchParam, gifList, apiKey, giphy4j, runOnce, delay, lazyLoad);
 	    thread = new Thread(runnable, "GiphyTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
@@ -75,12 +75,12 @@ public class GiphyLoader extends GifLoader {
     }
 
     @Override
-    public GifList restart(String searchParam, GifList gifList, boolean runOnce, long delay) {
+    public GifList restart(String searchParam, GifList gifList, boolean runOnce, long delay, boolean lazyLoad) {
 	logger.info("Stopping the current thread: " + thread + "...");
 	runnable.stop();
 	logger.debug(thread + " successfully stopped.");
 
-	runnable = new GiphyTask(applet, searchParam, gifList, apiKey, giphy4j, runOnce, delay);
+	runnable = new GiphyTask(applet, searchParam, gifList, apiKey, giphy4j, runOnce, delay, lazyLoad);
 	thread = new Thread(runnable, "GiphyTask");
 
 	logger.info("Starting Thread: " + thread + "...");

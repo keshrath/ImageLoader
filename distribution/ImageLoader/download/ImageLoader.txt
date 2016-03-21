@@ -12,7 +12,7 @@ paragraph = The API uses thread based loader task to fetch the images. It's poss
 
 version = 2
 
-prettyVersion = 2.0.0
+prettyVersion = 2.0.1
 
 minRevision = 0
 maxRevision = 0

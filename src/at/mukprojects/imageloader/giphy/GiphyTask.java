@@ -51,7 +51,7 @@ public class GiphyTask implements Runnable {
     private GifList gifList;
 
     private String apiKey;
-
+    private boolean lazyLoad;
     private Giphy giphy;
 
     private boolean runOnce;
@@ -76,14 +76,18 @@ public class GiphyTask implements Runnable {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      */
     public GiphyTask(PApplet applet, String searchParam, GifList gifList, String apiKey, Giphy giphy, boolean runOnce,
-	    long delay) {
+	    long delay, boolean lazyLoad) {
 	this.applet = applet;
 	this.searchParam = searchParam;
 	this.gifList = gifList;
 
 	this.apiKey = apiKey;
+	this.lazyLoad = lazyLoad;
 	this.giphy = giphy;
 
 	this.runOnce = runOnce;
@@ -123,25 +127,30 @@ public class GiphyTask implements Runnable {
 			long timestamp = new Date().getTime();
 			String imgUrl = result.getImages().getOriginal().getUrl();
 
-			URL u = new URL(imgUrl);
-			HttpURLConnection uc = (HttpURLConnection) u.openConnection();
+			if (!lazyLoad) {
+			    URL u = new URL(imgUrl);
+			    HttpURLConnection uc = (HttpURLConnection) u.openConnection();
 
-			GifDecoder decoder = new GifDecoder();
-			decoder.read(new BufferedInputStream(uc.getInputStream()));
+			    GifDecoder decoder = new GifDecoder();
+			    decoder.read(new BufferedInputStream(uc.getInputStream()));
 
-			int n = decoder.getFrameCount();
+			    int n = decoder.getFrameCount();
 
-			PImage[] frames = new PImage[n];
+			    PImage[] frames = new PImage[n];
 
-			for (int j = 0; j < n; j++) {
-			    BufferedImage frame = decoder.getFrame(j);
-			    frames[j] = new PImage(frame.getWidth(), frame.getHeight(), PImage.ARGB);
-			    System.arraycopy(
-				    frame.getRGB(0, 0, frame.getWidth(), frame.getHeight(), null, 0, frame.getWidth()),
-				    0, frames[j].pixels, 0, frame.getWidth() * frame.getHeight());
+			    for (int j = 0; j < n; j++) {
+				BufferedImage frame = decoder.getFrame(j);
+				frames[j] = new PImage(frame.getWidth(), frame.getHeight(), PImage.ARGB);
+				System.arraycopy(
+					frame.getRGB(0, 0, frame.getWidth(), frame.getHeight(), null, 0,
+						frame.getWidth()),
+					0, frames[j].pixels, 0, frame.getWidth() * frame.getHeight());
+			    }
+			    
+			    gifList.addImage(new GifData(id, imgInfo, timestamp, imgUrl, frames));
+			} else {
+			    gifList.addImage(new GifData(id, imgInfo, timestamp, imgUrl, null));
 			}
-
-			gifList.addImage(new GifData(id, imgInfo, timestamp, imgUrl, frames));
 		    }
 		} else {
 		    logger.warn("No results were found.");

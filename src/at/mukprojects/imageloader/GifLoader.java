@@ -72,9 +72,9 @@ public abstract class GifLoader {
      * @return The used ImageList.
      */
     public GifList start(String searchParam) {
-	return start(searchParam, new GifList(), false, 60 * 1000);
+	return start(searchParam, new GifList(), false, 60 * 1000, true);
     }
-    
+
     /**
      * Starts the loader.
      * 
@@ -87,7 +87,7 @@ public abstract class GifLoader {
      * @return The used ImageList.
      */
     public GifList start(String searchParam, boolean runOnce, long delay) {
-	return start(searchParam, new GifList(), runOnce, delay);
+	return start(searchParam, new GifList(), runOnce, delay, true);
     }
 
     /**
@@ -101,9 +101,12 @@ public abstract class GifLoader {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      * @return The used ImageList.
      */
-    public abstract GifList start(String searchParam, GifList gifList, boolean runOnce, long delay);
+    public abstract GifList start(String searchParam, GifList gifList, boolean runOnce, long delay, boolean lazyLoad);
 
     /**
      * Restarts the loader.
@@ -113,9 +116,9 @@ public abstract class GifLoader {
      * @return The used ImageList.
      */
     public GifList restart(String searchParam) {
-	return restart(searchParam, new GifList(), false, 60 * 1000);
+	return restart(searchParam, new GifList(), false, 60 * 1000, true);
     }
-    
+
     /**
      * Restarts the loader.
      * 
@@ -128,7 +131,7 @@ public abstract class GifLoader {
      * @return The used ImageList.
      */
     public GifList restart(String searchParam, boolean runOnce, long delay) {
-	return restart(searchParam, new GifList(), runOnce, delay);
+	return restart(searchParam, new GifList(), runOnce, delay, true);
     }
 
     /**
@@ -142,9 +145,12 @@ public abstract class GifLoader {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      * @return The used ImageList.
      */
-    public abstract GifList restart(String searchParam, GifList gifList, boolean runOnce, long delay);
+    public abstract GifList restart(String searchParam, GifList gifList, boolean runOnce, long delay, boolean lazyLoad);
 
     /**
      * Stops the loader.
