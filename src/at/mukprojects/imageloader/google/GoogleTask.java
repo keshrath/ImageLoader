@@ -39,7 +39,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 /**
- * This class represents the FlickrLoader task.
+ * This class represents the GoogleLoader task.
  * 
  * @author Mathias Markl
  */

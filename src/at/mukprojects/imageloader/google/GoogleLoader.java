@@ -85,7 +85,7 @@ public class GoogleLoader extends ImageLoader {
 	    return restart(searchParam, imageList, runOnce, delay);
 	} else {
 	    runnable = new GoogleTask(applet, searchParam, imageList, apiKey, searchEngineId, runOnce, delay);
-	    thread = new Thread(runnable, "FlickrTask");
+	    thread = new Thread(runnable, "GoogleTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
 	    thread.start();
@@ -102,7 +102,7 @@ public class GoogleLoader extends ImageLoader {
 	logger.debug(thread + " successfully stopped.");
 
 	runnable = new GoogleTask(applet, searchParam, imageList, apiKey, searchEngineId, runOnce, delay);
-	thread = new Thread(runnable, "FlickrTask");
+	thread = new Thread(runnable, "GoogleTask");
 
 	logger.info("Starting Thread: " + thread + "...");
 	thread.start();

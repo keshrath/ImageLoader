@@ -132,7 +132,14 @@ public class ImageList {
 	return outputImg;
     }
 
-    private Image getImage(int index) {
+    /**
+     * Gets the image of the given index or null if the index has no image.
+     * 
+     * @param index
+     *            The index.
+     * @return The image.
+     */
+    public Image getImage(int index) {
 	int counter = 0;
 
 	for (Image img : images.values()) {

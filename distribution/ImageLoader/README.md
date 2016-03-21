@@ -33,6 +33,44 @@ void mousePressed() {
 }
 ```
 
+## Example (Giphy)
+
+```java
+GifLoader loader;
+GifList list;
+PImage[] imgs;
+int index;
+
+void setup() {
+  size(800, 450);
+  frameRate(25);
+
+  loader = new GiphyLoader(this, apiKey);
+  list = loader.start("cat funny", false, 60 * 1000);
+
+  index = 0;
+}
+
+void draw() {
+  if (imgs == null) {
+    if (list.size() > 0) {
+      imgs = list.getRandom().getGifFrames();
+    }
+  } else {
+    image(imgs[index], 0, 0, width, height);
+    index++;
+    if (index > imgs.length - 1) {
+      index = 0;
+    }
+  }
+}
+
+void mousePressed() {
+  imgs = list.getRandom().getGifFrames();
+  index = 0;
+}
+```
+
 ## API
 
 To connect to the APIs from Flickr, Instagram and Google the ImageLoader uses other libraries.
@@ -84,6 +122,14 @@ Get your Google API key by following the steps on the [Google developers page] (
 
 ```java
 ImageLoader loader = new GoogleLoader(this, apiKey);
+```
+
+### Google
+
+Get your Giphy API key from the [Giphy Homepage] (https://api.giphy.com/).
+
+```java
+GifLoader loader = new GiphyLoader(this, apiKey);
 ```
 
 ## How to install

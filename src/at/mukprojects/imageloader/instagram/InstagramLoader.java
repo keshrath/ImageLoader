@@ -78,7 +78,7 @@ public class InstagramLoader extends ImageLoader {
 	    return restart(searchParam, imageList, runOnce, delay);
 	} else {
 	    runnable = new InstagramTask(applet, searchParam, imageList, instagram);
-	    thread = new Thread(runnable, "FlickrTask");
+	    thread = new Thread(runnable, "InstagramTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
 	    thread.start();
@@ -95,7 +95,7 @@ public class InstagramLoader extends ImageLoader {
 	logger.debug(thread + " successfully stopped.");
 
 	runnable = new InstagramTask(applet, searchParam, imageList, instagram);
-	thread = new Thread(runnable, "FlickrTask");
+	thread = new Thread(runnable, "InstagramTask");
 
 	logger.info("Starting Thread: " + thread + "...");
 	thread.start();

@@ -52,7 +52,7 @@ public class FileLoader extends ImageLoader {
 	    return restart(searchParam, imageList, runOnce, delay);
 	} else {
 	    runnable = new FileTask(applet, searchParam, imageList, runOnce, delay);
-	    thread = new Thread(runnable, "FlickrTask");
+	    thread = new Thread(runnable, "FileTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
 	    thread.start();
@@ -69,7 +69,7 @@ public class FileLoader extends ImageLoader {
 	logger.debug(thread + " successfully stopped.");
 
 	runnable = new FileTask(applet, searchParam, imageList, runOnce, delay);
-	thread = new Thread(runnable, "FlickrTask");
+	thread = new Thread(runnable, "FileTask");
 
 	logger.info("Starting Thread: " + thread + "...");
 	thread.start();
