@@ -17,6 +17,8 @@
 
 package at.mukprojects.imageloader;
 
+import java.io.IOException;
+
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -24,6 +26,7 @@ import org.apache.log4j.PatternLayout;
 
 import at.mukprojects.imageloader.image.ImageList;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 /**
  * Base class for any ImageLoader.
@@ -31,6 +34,27 @@ import processing.core.PApplet;
  * @author Mathias Markl
  */
 public abstract class ImageLoader {
+
+    /**
+     * Static PApplet which gets initialized by the constructor.
+     */
+    private static PApplet appletLoader;
+
+    /**
+     * Loads an image file.
+     * 
+     * @param file
+     *            The image file.
+     * @return The image as an PImage object.
+     * @throws IOException
+     */
+    public static PImage loadImage(String file) throws IOException {
+	if (appletLoader == null) {
+	    throw new IOException("The PApplet wasn't initialized by the constructor."
+		    + " You need to initialize a ImageLoader object first.");
+	}
+	return appletLoader.loadImage(file);
+    }
 
     /**
      * Logger Settings
@@ -50,6 +74,7 @@ public abstract class ImageLoader {
      *            The Processing PApplet.
      */
     public ImageLoader(PApplet applet) {
+	appletLoader = applet;
 	this.applet = applet;
 
 	/*
@@ -72,9 +97,9 @@ public abstract class ImageLoader {
      * @return The used ImageList.
      */
     public ImageList start(String searchParam) {
-	return start(searchParam, new ImageList(), false, 60 * 1000);
+	return start(searchParam, new ImageList(), false, 60 * 1000, true);
     }
-    
+
     /**
      * Starts the loader.
      * 
@@ -87,7 +112,7 @@ public abstract class ImageLoader {
      * @return The used ImageList.
      */
     public ImageList start(String searchParam, boolean runOnce, long delay) {
-	return start(searchParam, new ImageList(), runOnce, delay);
+	return start(searchParam, new ImageList(), runOnce, delay, true);
     }
 
     /**
@@ -101,9 +126,13 @@ public abstract class ImageLoader {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      * @return The used ImageList.
      */
-    public abstract ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay);
+    public abstract ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay,
+	    boolean lazyLoad);
 
     /**
      * Restarts the loader.
@@ -113,9 +142,9 @@ public abstract class ImageLoader {
      * @return The used ImageList.
      */
     public ImageList restart(String searchParam) {
-	return restart(searchParam, new ImageList(), false, 60 * 1000);
+	return restart(searchParam, new ImageList(), false, 60 * 1000, true);
     }
-    
+
     /**
      * Restarts the loader.
      * 
@@ -128,7 +157,7 @@ public abstract class ImageLoader {
      * @return The used ImageList.
      */
     public ImageList restart(String searchParam, boolean runOnce, long delay) {
-	return restart(searchParam, new ImageList(), runOnce, delay);
+	return restart(searchParam, new ImageList(), runOnce, delay, true);
     }
 
     /**
@@ -142,9 +171,13 @@ public abstract class ImageLoader {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      * @return The used ImageList.
      */
-    public abstract ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay);
+    public abstract ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay,
+	    boolean lazyLoad);
 
     /**
      * Stops the loader.

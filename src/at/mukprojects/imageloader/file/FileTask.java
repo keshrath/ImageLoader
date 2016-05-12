@@ -46,6 +46,7 @@ public class FileTask implements Runnable {
 
     private boolean runOnce;
     private long delay;
+    private boolean lazyLoad;
 
     private volatile boolean running;
 
@@ -62,14 +63,19 @@ public class FileTask implements Runnable {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      */
-    public FileTask(PApplet applet, String searchParam, ImageList imageList, boolean runOnce, long delay) {
+    public FileTask(PApplet applet, String searchParam, ImageList imageList, boolean runOnce, long delay,
+	    boolean lazyLoad) {
 	this.applet = applet;
 	this.searchParam = searchParam;
 	this.imageList = imageList;
 
 	this.runOnce = runOnce;
 	this.delay = delay;
+	this.lazyLoad = lazyLoad;
 
 	running = true;
     }
@@ -96,13 +102,15 @@ public class FileTask implements Runnable {
 
 		    String imgInfo = "";
 		    imgInfo += "Name: " + file.getName() + "\n";
-		    imgInfo += "Last Modified:\n";
-		    imgInfo += new Date(file.lastModified()).toString();
+		    imgInfo += "Last Modified: " + new Date(file.lastModified()).toString();
 
 		    long timestamp = new Date().getTime();
 		    String imgUrl = file.getAbsolutePath();
 
-		    PImage img = applet.loadImage(imgUrl);
+		    PImage img = null;
+		    if (!lazyLoad) {
+			img = applet.loadImage(imgUrl);
+		    }
 
 		    imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
 		}

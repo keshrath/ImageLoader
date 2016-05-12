@@ -104,7 +104,7 @@ To generate your access token, just follow these few steps:
 * Register a new client application on Instagram.
 * Fill out the required fields for registering a new client id making sure to set the OAuth redirect_uri field to "http://localhost" (without quotes).
 * Also, be sure to uncheck the "Disable implicit OAuth" box or else this method will not work.
-* Paste the following URL into any browser. (https://instagram.com/oauth/authorize/?client_id=[CLIENT_ID_HERE]&redirect_uri=http://localhost&response_type=token)
+* Paste the following URL into any browser. (https://instagram.com/oauth/authorize/?client_id=[CLIENT_ID_HERE]&redirect_uri=http://localhost&response_type=token&scope=public)
 * Make sure that you replaced the [CLIENT_ID_HERE] with your generated one.
 * Accept the access for your client.
 * Now Instagram will redirect you to your local host and you can copy the token from the URL. (localhost/#access_token=...)

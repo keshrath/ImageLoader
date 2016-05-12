@@ -17,13 +17,21 @@
 
 package at.mukprojects.imageloader;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
 import at.mukprojects.imageloader.gif.GifList;
+import gifAnimation.GifDecoder;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 /**
  * Base class for any GifLoader.
@@ -31,6 +39,58 @@ import processing.core.PApplet;
  * @author Mathias Markl
  */
 public abstract class GifLoader {
+
+    /**
+     * Static PApplet which gets initialized by the constructor.
+     */
+    private static PApplet appletLoader;
+
+    /**
+     * Loads an image file.
+     * 
+     * @param file
+     *            The image file.
+     * @return The image as an PImage object.
+     * @throws IOException
+     *             Is thrown in case an error occurs.
+     */
+    public static PImage loadImage(String file) throws IOException {
+	if (appletLoader == null) {
+	    throw new IOException("The PApplet wasn't initialized by the constructor."
+		    + " You need to initialize a GifLoader object first.");
+	}
+	return appletLoader.loadImage(file);
+    }
+
+    /**
+     * Loads a GIF file.
+     * 
+     * @param file
+     *            The GIF file.
+     * @return The GIF as an PImage[] array.
+     * @throws IOException
+     *             Is thrown in case an error occurs.
+     */
+    public static PImage[] loadGif(String fileURL) throws IOException {
+	URL u = new URL(fileURL);
+	HttpURLConnection uc = (HttpURLConnection) u.openConnection();
+
+	GifDecoder decoder = new GifDecoder();
+	decoder.read(new BufferedInputStream(uc.getInputStream()));
+
+	int n = decoder.getFrameCount();
+
+	PImage[] frames = new PImage[n];
+
+	for (int j = 0; j < n; j++) {
+	    BufferedImage frame = decoder.getFrame(j);
+	    frames[j] = new PImage(frame.getWidth(), frame.getHeight(), PImage.ARGB);
+	    System.arraycopy(frame.getRGB(0, 0, frame.getWidth(), frame.getHeight(), null, 0, frame.getWidth()), 0,
+		    frames[j].pixels, 0, frame.getWidth() * frame.getHeight());
+	}
+
+	return frames;
+    }
 
     /**
      * Logger Settings
@@ -50,6 +110,7 @@ public abstract class GifLoader {
      *            The Processing PApplet.
      */
     public GifLoader(PApplet applet) {
+	appletLoader = applet;
 	this.applet = applet;
 
 	/*

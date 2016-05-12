@@ -50,6 +50,7 @@ public class FlickrTask implements Runnable {
 
     private boolean runOnce;
     private long delay;
+    private boolean lazyLoad;
 
     private volatile boolean running;
 
@@ -68,9 +69,12 @@ public class FlickrTask implements Runnable {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      */
     public FlickrTask(PApplet applet, String searchParam, ImageList imageList, Flickr flickr, boolean runOnce,
-	    long delay) {
+	    long delay, boolean lazyLoad) {
 	this.applet = applet;
 	this.searchParam = searchParam;
 	this.imageList = imageList;
@@ -78,6 +82,7 @@ public class FlickrTask implements Runnable {
 
 	this.runOnce = runOnce;
 	this.delay = delay;
+	this.lazyLoad = lazyLoad;
 
 	running = true;
     }
@@ -111,15 +116,16 @@ public class FlickrTask implements Runnable {
 
 		    String imgInfo = "";
 		    imgInfo += "Title: " + photo.getTitle() + "\n";
-		    imgInfo += "Description:\n";
-		    imgInfo += photo.getDescription() + "\n";
-		    imgInfo += "License:\n";
-		    imgInfo += FlickrLicenses.fromId(photo.getLicense()).getText();
+		    imgInfo += "Description: " + photo.getDescription() + "\n";
+		    imgInfo += "License: " + FlickrLicenses.fromId(photo.getLicense()).getText();
 
 		    long timestamp = new Date().getTime();
 		    String imgUrl = photo.getLargeUrl();
 
-		    PImage img = applet.loadImage(imgUrl);
+		    PImage img = null;
+		    if (!lazyLoad) {
+			img = applet.loadImage(imgUrl);
+		    }
 
 		    imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
 		}

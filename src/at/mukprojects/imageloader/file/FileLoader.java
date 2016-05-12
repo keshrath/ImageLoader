@@ -44,14 +44,14 @@ public class FileLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay) {
+    public ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay, boolean lazyLoad) {
 	if (thread != null) {
 	    logger.info("Loader is already started.");
 	    logger.info("The restart method will be used instead.");
 
-	    return restart(searchParam, imageList, runOnce, delay);
+	    return restart(searchParam, imageList, runOnce, delay, lazyLoad);
 	} else {
-	    runnable = new FileTask(applet, searchParam, imageList, runOnce, delay);
+	    runnable = new FileTask(applet, searchParam, imageList, runOnce, delay, lazyLoad);
 	    thread = new Thread(runnable, "FileTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
@@ -63,12 +63,12 @@ public class FileLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay) {
+    public ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay, boolean lazyLoad) {
 	logger.info("Stopping the current thread: " + thread + "...");
 	runnable.stop();
 	logger.debug(thread + " successfully stopped.");
 
-	runnable = new FileTask(applet, searchParam, imageList, runOnce, delay);
+	runnable = new FileTask(applet, searchParam, imageList, runOnce, delay, lazyLoad);
 	thread = new Thread(runnable, "FileTask");
 
 	logger.info("Starting Thread: " + thread + "...");

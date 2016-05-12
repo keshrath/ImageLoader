@@ -41,12 +41,14 @@ public class InstagramTask implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(InstagramTask.class);
 
-    private static final long delay = 1000 * 60;
-
     private PApplet applet;
     private String searchParam;
     private ImageList imageList;
     private Instagram instagram;
+
+    private boolean runOnce;
+    private long delay;
+    private boolean lazyLoad;
 
     private volatile boolean running;
 
@@ -61,12 +63,25 @@ public class InstagramTask implements Runnable {
      *            The ImageList object.
      * @param instagram
      *            The Instagram object.
+     * @param runOnce
+     *            If the value is set to true, the loader will only run once.
+     * @param delay
+     *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      */
-    public InstagramTask(PApplet applet, String searchParam, ImageList imageList, Instagram instagram) {
+    public InstagramTask(PApplet applet, String searchParam, ImageList imageList, Instagram instagram, boolean runOnce,
+	    long delay, boolean lazyLoad) {
 	this.applet = applet;
 	this.searchParam = searchParam;
 	this.imageList = imageList;
+
 	this.instagram = instagram;
+
+	this.runOnce = runOnce;
+	this.delay = delay;
+	this.lazyLoad = lazyLoad;
 
 	running = true;
     }
@@ -94,25 +109,52 @@ public class InstagramTask implements Runnable {
 
 		    String imgInfo = "";
 		    imgInfo += "User: " + data.getUser().getFullName() + "\n";
-		    imgInfo += "Description:\n";
-		    imgInfo += data.getCaption().getText() + "\n";
-		    imgInfo += "Filter:\n";
-		    imgInfo += data.getImageFilter();
+		    imgInfo += "Description: " + data.getCaption().getText() + "\n";
+		    imgInfo += "Filter:\n" + data.getImageFilter();
 
 		    long timestamp = new Date().getTime();
 		    String imgUrl = data.getImages().getStandardResolution().getImageUrl();
 
-		    PImage img = applet.loadImage(imgUrl);
+		    boolean validImgUrl = false;
 
-		    imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
+		    if ((!(imgUrl.endsWith(".jpg") || imgUrl.endsWith(".jpeg") || imgUrl.endsWith(".tga")
+			    || imgUrl.endsWith("png") || imgUrl.endsWith(".gif")))
+			    && (imgUrl.contains(".jpg") || imgUrl.contains("jpeg") || imgUrl.contains(".tga")
+				    || imgUrl.contains("png") || imgUrl.contains(".gif"))) {
+			imgUrl = imgUrl.split("ig_cache_key=")[0];
+			imgUrl = imgUrl.substring(0, imgUrl.length() - 1);
+			validImgUrl = true;
+		    } else if (imgUrl.endsWith(".jpg") || imgUrl.endsWith(".jpeg") || imgUrl.endsWith(".tga")
+			    || imgUrl.endsWith("png") || imgUrl.endsWith(".gif")) {
+			validImgUrl = true;
+		    } else {
+			validImgUrl = false;
+		    }
+
+		    PImage img = null;
+		    if (!lazyLoad) {
+			img = applet.loadImage(imgUrl);
+		    }
+
+		    if (validImgUrl) {
+			imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
+		    }
 		}
 
+		if (runOnce) {
+		    logger.debug("Task is finished.");
+		    running = false;
+		} else {
+		    logger.debug("Task is delayed...");
+		    Thread.sleep(delay);
+		}
 		logger.debug("Task is delayed...");
 		Thread.sleep(delay);
 	    } catch (InterruptedException | InstagramException e) {
 		logger.error("An error occured. The task will be stopped.", e);
 		running = false;
 	    }
+
 	}
 
 	logger.info("Task has stopped.");

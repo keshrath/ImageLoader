@@ -56,6 +56,7 @@ public class GoogleTask implements Runnable {
 
     private boolean runOnce;
     private long delay;
+    private boolean lazyLoad;
 
     private volatile boolean running;
 
@@ -76,9 +77,12 @@ public class GoogleTask implements Runnable {
      *            If the value is set to true, the loader will only run once.
      * @param delay
      *            The delay between two loading tasks. (milliseconds)
+     * @param lazyLoad
+     *            Indicates if the load process is lazy or not. Use lazy mode to
+     *            save memory space.
      */
     public GoogleTask(PApplet applet, String searchParam, ImageList imageList, String apiKey, String searchEngineId,
-	    boolean runOnce, long delay) {
+	    boolean runOnce, long delay, boolean lazyLoad) {
 	this.applet = applet;
 	this.searchParam = searchParam;
 	this.imageList = imageList;
@@ -88,6 +92,7 @@ public class GoogleTask implements Runnable {
 
 	this.runOnce = runOnce;
 	this.delay = delay;
+	this.lazyLoad = lazyLoad;
 
 	running = true;
     }
@@ -131,15 +136,16 @@ public class GoogleTask implements Runnable {
 
 			String imgInfo = "";
 			imgInfo += "Title: " + result.getTitle() + "\n";
-			imgInfo += "DisplayLink:\n";
-			imgInfo += result.getDisplayLink() + "\n";
-			imgInfo += "Snippet:\n";
-			imgInfo += result.getSnippet();
+			imgInfo += "DisplayLink: " + result.getDisplayLink() + "\n";
+			imgInfo += "Snippet: " + result.getSnippet();
 
 			long timestamp = new Date().getTime();
 			String imgUrl = result.getLink();
 
-			PImage img = applet.loadImage(imgUrl);
+			PImage img = null;
+			if (!lazyLoad) {
+			    img = applet.loadImage(imgUrl);
+			}
 
 			imageList.addImage(new Image(id, imgInfo, timestamp, imgUrl, img));
 		    }

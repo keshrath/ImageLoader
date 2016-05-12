@@ -10,9 +10,9 @@ sentence = ImageLoader is an simple to use API to load images from either Instag
 
 paragraph = The API uses thread based loader task to fetch the images. It's possible to set an delay so that the task will run several times in the background and checks for new images. All images are stored in a list and can be accessed by several methods. 
 
-version = 2
+version = 3
 
-prettyVersion = 2.0.1
+prettyVersion = 3.0.0
 
 minRevision = 0
 maxRevision = 0

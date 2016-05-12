@@ -53,6 +53,7 @@ public class InstagramLoader extends ImageLoader {
 	super(applet);
 
 	instagram = new Instagram(accessToken, secret);
+
     }
 
     /**
@@ -70,14 +71,14 @@ public class InstagramLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay) {
+    public ImageList start(String searchParam, ImageList imageList, boolean runOnce, long delay, boolean lazyLoad) {
 	if (thread != null) {
 	    logger.info("Loader is already started.");
 	    logger.info("The restart method will be used instead.");
 
-	    return restart(searchParam, imageList, runOnce, delay);
+	    return restart(searchParam, imageList, runOnce, delay, lazyLoad);
 	} else {
-	    runnable = new InstagramTask(applet, searchParam, imageList, instagram);
+	    runnable = new InstagramTask(applet, searchParam, imageList, instagram, runOnce, delay, lazyLoad);
 	    thread = new Thread(runnable, "InstagramTask");
 
 	    logger.info("Starting Thread: " + thread + "...");
@@ -89,12 +90,12 @@ public class InstagramLoader extends ImageLoader {
     }
 
     @Override
-    public ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay) {
+    public ImageList restart(String searchParam, ImageList imageList, boolean runOnce, long delay, boolean lazyLoad) {
 	logger.info("Stopping the current thread: " + thread + "...");
 	runnable.stop();
 	logger.debug(thread + " successfully stopped.");
 
-	runnable = new InstagramTask(applet, searchParam, imageList, instagram);
+	runnable = new InstagramTask(applet, searchParam, imageList, instagram, runOnce, delay, lazyLoad);
 	thread = new Thread(runnable, "InstagramTask");
 
 	logger.info("Starting Thread: " + thread + "...");

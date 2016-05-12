@@ -150,6 +150,9 @@ public class GifData {
 	return frames;
     }
     
+    /**
+     * Frees the memory space.
+     */
     public void clearMemSpace() {
 	frames = null;
     }

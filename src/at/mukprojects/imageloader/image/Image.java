@@ -17,8 +17,10 @@
 
 package at.mukprojects.imageloader.image;
 
+import java.io.IOException;
 import java.util.Date;
 
+import at.mukprojects.imageloader.ImageLoader;
 import processing.core.PImage;
 
 /**
@@ -95,22 +97,37 @@ public class Image {
     }
 
     /**
-     * Gets the image.
+     * Gets the image. If the image is in lazy load mode and an error occurs during
+     * the loading process the method will return null.
      * 
      * @return The image.
      */
     public PImage getImg() {
+	if(img == null) {
+	    try {
+		img = ImageLoader.loadImage(imgUrl);
+	    } catch(Exception e) {}
+	}
 	return img;
+    }
+    
+    /**
+     * Frees the memory space.
+     */
+    public void clearMemSpace() {
+	img = null;
     }
 
     @Override
     public String toString() {
-	String s = "";
+	String s = "Image {\n";
 	
-	s += "ID: " + id + "\n";
-	s += "Info:\n" + imgInfo + "\n";
-	s += "imgUrl:\n" + imgInfo + "\n";
-	s += "Timestamp: " + new Date(timestamp);
+	s += " ID: " + id + "\n";
+	s += " Info [\n" + imgInfo.replaceAll("(?m)^", "  ") + "\n ]\n";
+	s += " imgUrl :" + imgUrl + "\n";
+	s += " Timestamp: " + new Date(timestamp) + "\n";
+	
+	s += "}";
 	
 	return s;
     }
