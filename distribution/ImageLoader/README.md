@@ -2,9 +2,11 @@
 
 ImageLoader is an library for the [Processing](http://processing.org/) Development Environment (PDE).
 
-ImageLoader is an simple to use API to load images from either Instagram, Flickr, Google, Giphy or your file system.
+ImageLoader is an simple to use API to load images from either Instagram, Flickr, Google, Giphy, Tumblr or your file system.
 
 The API uses thread based loader task to fetch the images. It's possible to set an delay so that the task will run several times in the background and checks for new images. All images are stored in a list and can be accessed by several methods.
+
+Keep in mind that GIFs can consume quite a lot of memory. So you might want to use the lazy load mode and clear the memory after some time. To decode the GIF files the Loader uses the [gifAnimation](https://github.com/extrapixel/gif-animation/tree/124fb806672dca50c9da954c2abffa4bff5ac3bb) library.
 
 ## Example (Flickr)
 
@@ -73,12 +75,13 @@ void mousePressed() {
 
 ## API
 
-To connect to the APIs from Flickr, Instagram and Google the ImageLoader uses other libraries.
+To connect to the APIs from Flickr, Instagram, Tumblr, Giphy and Google the ImageLoader uses other libraries.
 
 * Instagram ([jInstagram] (https://github.com/sachin-handiekar/jInstagram))
 * Google ([API Client Library for Java] (https://developers.google.com/api-client-library/java/))
 * Flickr ([Flickr4Java] (https://github.com/callmeal/Flickr4Java))
 * Giphy ([Giphy4J] (https://github.com/keshrath/Giphy4J))
+* Tumblr ([Jumblr] (https://github.com/tumblr/jumblr))
 
 ### Instagram
 
@@ -104,7 +107,7 @@ To generate your access token, just follow these few steps:
 * Register a new client application on Instagram.
 * Fill out the required fields for registering a new client id making sure to set the OAuth redirect_uri field to "http://localhost" (without quotes).
 * Also, be sure to uncheck the "Disable implicit OAuth" box or else this method will not work.
-* Paste the following URL into any browser. (https://instagram.com/oauth/authorize/?client_id=[CLIENT_ID_HERE]&redirect_uri=http://localhost&response_type=token&scope=public)
+* Paste the following URL into any browser.</br>(https://instagram.com/oauth/authorize/?client_id=[CLIENT_ID_HERE]&redirect_uri=http://localhost&response_type=token&scope=public)
 * Make sure that you replaced the [CLIENT_ID_HERE] with your generated one.
 * Accept the access for your client.
 * Now Instagram will redirect you to your local host and you can copy the token from the URL. (localhost/#access_token=...)
@@ -131,6 +134,14 @@ Get your Giphy API key from the [Giphy Homepage] (https://api.giphy.com/).
 
 ```java
 GifLoader loader = new GiphyLoader(this, apiKey);
+```
+
+### Tumblr
+
+Get your Tumblr API key from the [Tumblr Homepage] (https://www.tumblr.com/docs/en/api/v2).
+
+```java
+TublrImageLoader loader = new TublrImageLoader(this, apiKey, apiSecret);
 ```
 
 ## How to install

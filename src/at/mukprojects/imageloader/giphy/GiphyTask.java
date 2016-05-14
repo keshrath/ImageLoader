@@ -17,11 +17,7 @@
 
 package at.mukprojects.imageloader.giphy;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -33,9 +29,7 @@ import at.mukprojects.giphy4j.entity.search.SearchFeed;
 import at.mukprojects.giphy4j.exception.GiphyException;
 import at.mukprojects.imageloader.gif.GifData;
 import at.mukprojects.imageloader.gif.GifList;
-import gifAnimation.GifDecoder;
 import processing.core.PApplet;
-import processing.core.PImage;
 
 /**
  * This class represents the GiphyLoader task.
@@ -115,39 +109,20 @@ public class GiphyTask implements Runnable {
 
 		if (feed.getDataList() != null && feed.getDataList().size() > 0) {
 		    for (GiphyData result : feed.getDataList()) {
-			String id = "Google#" + result.getId();
+			String id = "Giphy#" + result.getId();
 
 			String imgInfo = "";
 			imgInfo += "Slug: " + result.getSlug() + "\n";
-			imgInfo += "Source:\n";
-			imgInfo += result.getSource() + "\n";
-			imgInfo += "ImportDatetime:\n";
-			imgInfo += result.getImportDatetime();
+			imgInfo += "Source: " + result.getSource() + "\n";
+			imgInfo += "ImportDatetime: " + result.getImportDatetime();
 
 			long timestamp = new Date().getTime();
 			String imgUrl = result.getImages().getOriginal().getUrl();
 
 			if (!lazyLoad) {
-			    URL u = new URL(imgUrl);
-			    HttpURLConnection uc = (HttpURLConnection) u.openConnection();
-
-			    GifDecoder decoder = new GifDecoder();
-			    decoder.read(new BufferedInputStream(uc.getInputStream()));
-
-			    int n = decoder.getFrameCount();
-
-			    PImage[] frames = new PImage[n];
-
-			    for (int j = 0; j < n; j++) {
-				BufferedImage frame = decoder.getFrame(j);
-				frames[j] = new PImage(frame.getWidth(), frame.getHeight(), PImage.ARGB);
-				System.arraycopy(
-					frame.getRGB(0, 0, frame.getWidth(), frame.getHeight(), null, 0,
-						frame.getWidth()),
-					0, frames[j].pixels, 0, frame.getWidth() * frame.getHeight());
-			    }
-			    
-			    gifList.addImage(new GifData(id, imgInfo, timestamp, imgUrl, frames));
+			    GifData gif = new GifData(id, imgInfo, timestamp, imgUrl, null);
+			    gif.loadGif();
+			    gifList.addImage(gif);
 			} else {
 			    gifList.addImage(new GifData(id, imgInfo, timestamp, imgUrl, null));
 			}

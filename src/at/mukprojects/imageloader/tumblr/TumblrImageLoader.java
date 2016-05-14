@@ -50,7 +50,7 @@ public class TumblrImageLoader extends ImageLoader {
      *            The Processing PApplet.
      * @param apiKey
      *            The API key.
-     * @param searchEngineId
+     * @param apiSecret
      *            The API secret.
      */
     public TumblrImageLoader(PApplet applet, String apiKey, String apiSecret) {

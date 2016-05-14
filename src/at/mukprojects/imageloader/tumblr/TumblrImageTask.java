@@ -34,7 +34,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 /**
- * This class represents the GoogleLoader task.
+ * This class represents the TumblrLoader task.
  * 
  * @author Mathias Markl
  */
@@ -63,10 +63,6 @@ public class TumblrImageTask implements Runnable {
      *            The search parameter.
      * @param imageList
      *            The ImageList object.
-     * @param apiKey
-     *            The API key.
-     * @param searchEngineId
-     *            The search engine id.
      * @param runOnce
      *            If the value is set to true, the loader will only run once.
      * @param delay
@@ -98,12 +94,12 @@ public class TumblrImageTask implements Runnable {
     public void run() {
 	logger.info("Task is running...");
 
-	for (int i = 0; running; i++) {
+	for (int i = 0; running; i += 20) {
 	    try {
 		logger.debug("Task loads data.");
 
 		Map<String, Integer> options = new HashMap<String, Integer>();
-		options.put("limit", 50);
+		options.put("limit", 20);
 		options.put("offset", i);
 
 		for (Post post : client.tagged(searchParam, options)) {

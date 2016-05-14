@@ -17,7 +17,6 @@
 
 package at.mukprojects.imageloader.image;
 
-import java.io.IOException;
 import java.util.Date;
 
 import at.mukprojects.imageloader.ImageLoader;
@@ -124,7 +123,7 @@ public class Image {
 	
 	s += " ID: " + id + "\n";
 	s += " Info [\n" + imgInfo.replaceAll("(?m)^", "  ") + "\n ]\n";
-	s += " imgUrl :" + imgUrl + "\n";
+	s += " ImgUrl :" + imgUrl + "\n";
 	s += " Timestamp: " + new Date(timestamp) + "\n";
 	
 	s += "}";

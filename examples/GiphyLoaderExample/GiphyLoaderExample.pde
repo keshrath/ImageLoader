@@ -23,6 +23,7 @@ String apiKey = "dc6zaTOxFJmzC";
 
 GifLoader loader;
 GifList list;
+GifData data;
 PImage[] imgs;
 int index;
 
@@ -39,10 +40,12 @@ void setup() {
 void draw() {
   if (imgs == null) {
     if (list.size() > 0) {
-      imgs = list.getRandom().getGifFrames();
+       data = list.getRandom();
+       imgs = data.getGifFrames();
     }
   } else {
     image(imgs[index], 0, 0, width, height);
+    delay(data.getDelay());
     index++;
     if (index > imgs.length - 1) {
       index = 0;

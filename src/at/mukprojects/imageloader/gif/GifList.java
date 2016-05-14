@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The ImageList holds all loaded gifs.
+ * The ImageList holds all loaded GIFs.
  * 
  * @author Mathias Markl
  */
@@ -51,7 +51,7 @@ public class GifList {
      * Adds an image to the list. If the list already has an image with the same
      * id, the image won't be added.
      * 
-     * @param img
+     * @param gif
      *            The image, which should be added to the list.
      */
     public void addImage(GifData gif) {
